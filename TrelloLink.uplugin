@@ -10,6 +10,7 @@
 	"DocsURL": "",
 	"MarketplaceURL": "",
 	"SupportURL": "",
+	"EngineVersion": "5.4.0",
 	"CanContainContent": false,
 	"IsBetaVersion": true,
 	"IsExperimentalVersion": true,
@@ -18,8 +19,7 @@
 		{
 			"Name": "TrelloLink",
 			"Type": "Editor",
-			"LoadingPhase": "Default",
-			"WhitelistPlateforms": ["Win64"]
+			"LoadingPhase": "Default"
 		}
 	]
 }

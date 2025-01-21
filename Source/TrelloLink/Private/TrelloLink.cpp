@@ -1,16 +1,21 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "TrelloLink.h"
+
+#include "LevelEditor.h"
+#include "SourceCodeNavigation.h"
 #include "TrelloLinkStyle.h"
 #include "TrelloLinkCommands.h"
 #include "Widgets/Docking/SDockTab.h"
 #include "Widgets/Layout/SBox.h"
 #include "Widgets/Text/STextBlock.h"
 #include "ToolMenus.h"
-#include "TrelloLink/UI/TrelloLinkDesign.h"
+#include "TrelloLink/Board/TrelloLinkBoard.h"
+#include "TrelloLink/Edit/TrelloLinkSettings.h"
 
 #pragma region Setup
 static const FName TrelloLinkTabName("TrelloLink");
+static const FName TrelloLinkSettingsTabName("TrelloLinkSettings");
 
 #define LOCTEXT_NAMESPACE "FTrelloLinkModule"
 
@@ -25,19 +30,25 @@ void FTrelloLinkModule::StartupModule()
 
 	PluginCommands = MakeShareable(new FUICommandList);
 
-	PluginCommands->MapAction(
-
+	/*PluginCommands->MapAction(
 		FTrelloLinkCommands::Get().OpenPluginWindow,
-		FExecuteAction::CreateRaw(this, &FTrelloLinkModule::PluginButtonClicked),
-		FCanExecuteAction());
+		FExecuteAction::CreateRaw(this, &FTrelloLinkModule::OpenTrelloEdit),
+		FCanExecuteAction());*/
 
 	UToolMenus::RegisterStartupCallback(
 		FSimpleMulticastDelegate::FDelegate::CreateRaw(this, &FTrelloLinkModule::RegisterMenus));
+	
 
 	FGlobalTabmanager::Get()->RegisterNomadTabSpawner(TrelloLinkTabName,
 	                                                  FOnSpawnTab::CreateRaw(
-		                                                  this, &FTrelloLinkModule::OnSpawnPluginTab))
+		                                                  this, &FTrelloLinkModule::OnSpawnTrelloEditTab))
 	                        .SetDisplayName(LOCTEXT("FTrelloLinkTabTitle", "Trello Link"))
+	                        .SetMenuType(ETabSpawnerMenuType::Hidden);
+	
+	FGlobalTabmanager::Get()->RegisterNomadTabSpawner(TrelloLinkSettingsTabName,
+	                                                  FOnSpawnTab::CreateRaw(
+		                                                  this, &FTrelloLinkModule::OnSpawnTrelloSettingsTab))
+	                        .SetDisplayName(LOCTEXT("FTrelloLinkSettingsTabTitle", "Trello Link Settings"))
 	                        .SetMenuType(ETabSpawnerMenuType::Hidden);
 }
 
@@ -57,49 +68,92 @@ void FTrelloLinkModule::ShutdownModule()
 	FGlobalTabmanager::Get()->UnregisterNomadTabSpawner(TrelloLinkTabName);
 }
 
-TSharedRef<SDockTab> FTrelloLinkModule::OnSpawnPluginTab(const FSpawnTabArgs& SpawnTabArgs)
+TSharedRef<SDockTab> FTrelloLinkModule::OnSpawnTrelloEditTab(const FSpawnTabArgs& SpawnTabArgs)
 {
 	return SNew(SDockTab)
-		.TabRole(ETabRole::NomadTab)
+		.TabRole(NomadTab)
 		[
 			//SNew(SBox)
 			//.HAlign(HAlign_Center)
 			//.VAlign(VAlign_Center)
 			//[
-			SNew(STrelloLinkDesign)
+			SNew(STrelloLinkBoard)
 			//]
 		];
 }
 
-void FTrelloLinkModule::PluginButtonClicked()
+TSharedRef<SDockTab> FTrelloLinkModule::OnSpawnTrelloSettingsTab(const FSpawnTabArgs& SpawnTabArgs)
+{
+	return SNew(SDockTab)
+		.TabRole(NomadTab)
+		[
+			//SNew(SBox)
+			//.HAlign(HAlign_Center)
+			//.VAlign(VAlign_Center)
+			//[
+			SNew(STrelloLinkSettings)
+			//]
+		];
+}
+
+void FTrelloLinkModule::OpenTrelloEdit()
 {
 	FGlobalTabmanager::Get()->TryInvokeTab(TrelloLinkTabName);
 }
 
+void FTrelloLinkModule::OpenTrelloSettings()
+{
+	FGlobalTabmanager::Get()->TryInvokeTab(TrelloLinkSettingsTabName);
+}
+
 void FTrelloLinkModule::RegisterMenus()
 {
-	// Owner will be used for cleanup in call to UToolMenus::UnregisterOwner
-	FToolMenuOwnerScoped OwnerScoped(this);
+	//
+	// // Owner will be used for cleanup in call to UToolMenus::UnregisterOwner
+	// FToolMenuOwnerScoped OwnerScoped(this);
+	//
+	//
+	// UToolMenu* Menu = UToolMenus::Get()->ExtendMenu("LevelEditor.MainMenu");
+	// {
+	// 	/*FToolMenuSection& Section = Menu->FindOrAddSection("WindowLayout");
+	// 	Section.AddMenuEntryWithCommandList(FTrelloLinkCommands::Get().OpenPluginWindow, PluginCommands);*/
+	//}
 
-	{
-		UToolMenu* Menu = UToolMenus::Get()->ExtendMenu("LevelEditor.MainMenu.Window");
-		{
-			FToolMenuSection& Section = Menu->FindOrAddSection("WindowLayout");
-			Section.AddMenuEntryWithCommandList(FTrelloLinkCommands::Get().OpenPluginWindow, PluginCommands);
-		}
-	}
+	/// Get Editor's main menu to extend it
+	UToolMenu* MainMenu = UToolMenus::Get()->ExtendMenu("LevelEditor.MainMenu");
+	
+	/// Add the SubMenu "Editor"
+	UToolMenu* EditorMenu = MainMenu->AddSubMenu(
+		MainMenu->MenuOwner,
+		NAME_None,
+		FName("Trello"),
+		INVTEXT("Trello"),
+		INVTEXT("Open Trello tool")
+	);
 
-	{
-		UToolMenu* ToolbarMenu = UToolMenus::Get()->ExtendMenu("LevelEditor.LevelEditorToolBar");
-		{
-			FToolMenuSection& Section = ToolbarMenu->FindOrAddSection("Settings");
-			{
-				FToolMenuEntry& Entry = Section.AddEntry(
-					FToolMenuEntry::InitToolBarButton(FTrelloLinkCommands::Get().OpenPluginWindow));
-				Entry.SetCommandList(PluginCommands);
-			}
-		}
-	}
+	/// Add the section "EDITOR TOOL"
+	FToolMenuSection& Section = EditorMenu->AddSection(
+		"TrelloLink",
+		INVTEXT("TrelloLink")
+	);
+
+	/// Add the command "Trello"
+	Section.AddMenuEntry(
+		"Trello Editor",
+		INVTEXT("Trello"),
+		INVTEXT("Open the trello editor, to edit card"),
+		FSlateIcon(FName("TrelloLinkStyle"), "TrelloLink.OpenPluginWindow"),
+		FUIAction(FExecuteAction::CreateLambda([&] { OpenTrelloEdit(); } ))
+	);
+	
+	Section.AddMenuEntry(
+		"Trello Settings",
+		INVTEXT("Trello Settings"),
+		INVTEXT("Change the settings of board trello"),
+		FSlateIcon(FName("TrelloLinkStyle"), "TrelloLink.OpenPluginWindow"),
+		FUIAction(FExecuteAction::CreateLambda([&] { OpenTrelloSettings(); } ))
+	);
+	
 }
 #pragma endregion Setup
 

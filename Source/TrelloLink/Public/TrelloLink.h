@@ -11,19 +11,20 @@ class FMenuBuilder;
 class FTrelloLinkModule : public IModuleInterface
 {
 #pragma region Unreal Setup
-
-private:
-	TSharedPtr<class FUICommandList> PluginCommands;
+	
+	TSharedPtr<FUICommandList> PluginCommands;
 
 public:
-	/** IModuleInterface implementation */
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
-	/** This function will be bound to Command (by default it will bring up plugin window) */
-	void PluginButtonClicked();
+	void OpenTrelloEdit();
+	void OpenTrelloSettings();
 
 private:
 	void RegisterMenus();
-	TSharedRef<class SDockTab> OnSpawnPluginTab(const class FSpawnTabArgs& SpawnTabArgs);
+/*	void AddMenu(FMenuBarBuilder& MenuBarBuilder);
+	void FillMenu(FMenuBuilder& MenuBuilder);*/
+	TSharedRef<SDockTab> OnSpawnTrelloEditTab(const class FSpawnTabArgs& SpawnTabArgs);
+	TSharedRef<SDockTab> OnSpawnTrelloSettingsTab(const FSpawnTabArgs& SpawnTabArgs);
 #pragma endregion Unreal Setup
 };

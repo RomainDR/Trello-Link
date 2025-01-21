@@ -44,7 +44,9 @@ public class TrelloLink : ModuleRules
 				"CoreUObject",
 				"Engine",
 				"Slate",
-				"SlateCore"
+				"SlateCore",
+				"LevelEditor",
+				"HTTP", "Json", "JsonUtilities"
 				// ... add private dependencies that you statically link with here ...	
 			}
 		);
