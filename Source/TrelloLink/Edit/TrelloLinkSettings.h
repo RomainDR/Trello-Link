@@ -26,7 +26,6 @@ public:
 
 private:
 	FReply TestConnection();
-	FReply SaveSettings();
 	FReply SaveCredentials();
 	void OnResponseAPI(TSharedPtr<IHttpRequest> HttpRequest, TSharedPtr<IHttpResponse> HttpResponse, bool bArg);
 	TSharedRef<SVerticalBox> CreateSection(TSharedPtr<SEditableTextBox>& _assign, const FString& _title,

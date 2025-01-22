@@ -1,0 +1,19 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "c:\\users\\drou0912\\documents\\unreal projects\\plugintrello\\plugins\\trellolink\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\trellolink\\module.trellolink.cpp",
+        "ProvidedModule": "",
+        "PCH": "c:\\users\\drou0912\\documents\\unreal projects\\plugintrello\\intermediate\\build\\win64\\x64\\plugintrelloeditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.cpp20.inclorderoldest.h.pch",
+        "Includes": [
+            "c:\\users\\drou0912\\documents\\unreal projects\\plugintrello\\plugins\\trellolink\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\trellolink\\definitions.trellolink.h",
+            "c:\\users\\drou0912\\documents\\unreal projects\\plugintrello\\plugins\\trellolink\\intermediate\\build\\win64\\unrealeditor\\inc\\trellolink\\uht\\trellolink.init.gen.cpp",
+            "c:\\users\\drou0912\\documents\\unreal projects\\plugintrello\\plugins\\trellolink\\intermediate\\build\\win64\\unrealeditor\\inc\\trellolink\\uht\\trellolinksettings.gen.cpp",
+            "c:\\users\\drou0912\\documents\\unreal projects\\plugintrello\\plugins\\trellolink\\source\\trellolink\\edit\\trellolinksettings.h",
+            "c:\\program files\\epic games\\ue_5.4\\engine\\source\\runtime\\online\\http\\public\\httpmodule.h",
+            "c:\\program files\\epic games\\ue_5.4\\engine\\source\\runtime\\online\\http\\public\\interfaces\\ihttprequest.h",
+            "c:\\program files\\epic games\\ue_5.4\\engine\\source\\runtime\\online\\http\\public\\interfaces\\ihttpbase.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

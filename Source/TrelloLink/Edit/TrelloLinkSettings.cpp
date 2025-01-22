@@ -28,9 +28,30 @@ FReply STrelloLinkSettings::TestConnection()
 	return FReply::Handled();
 }
 
-FReply STrelloLinkSettings::SaveSettings()
+FReply STrelloLinkSettings::SaveCredentials()
 {
-	return FReply::Unhandled();
+	const FString _path = FPaths::ProjectConfigDir();
+	const FString _fileName = "/credentials_trello.json";
+	const FString _fullPath = FPaths::Combine(_path, _fileName);
+	GLog->Log(_fullPath);
+
+	TMap<FString, FString> _parameters;
+	_parameters.Add("powerUpToken", powerUpField.Get()->GetText().ToString());
+	_parameters.Add("personalToken", tokenField.Get()->GetText().ToString());
+	_parameters.Add("boardId", idBoardField.Get()->GetText().ToString());
+
+	TSharedPtr<FJsonObject> JsonObject;
+
+	for (const TTuple<FString, FString>& Parameter : _parameters)
+		JsonObject.Get()->SetStringField(Parameter.Key, Parameter.Value);
+	
+	
+	FString jsonResult;
+	if (FJsonSerializer::Serialize(JsonObject.ToSharedRef(), TJsonWriterFactory<>::Create(&jsonResult, 0)))
+	{
+		FFileHelper::SaveStringToFile(jsonResult, *_fullPath);
+	}
+	return FReply::Handled();
 }
 
 void STrelloLinkSettings::OnResponseAPI(TSharedPtr<IHttpRequest> HttpRequest, TSharedPtr<IHttpResponse> HttpResponse,
@@ -150,51 +171,52 @@ TSharedRef<SBox> STrelloLinkSettings::CreateTab()
 						SNew(STextBlock)
 						.Text(FText::FromString("Settings"))
 						.Font(FONT_BOLD(32))
+						.TransformPolicy(ETextTransformPolicy::ToUpper)
 						.Justification(ETextJustify::Center)
 					]
 				]
 				+ SGridPanel::Slot(0, 1)
-				[
+				[					
 					SNew(SUniformGridPanel)
 					.SlotPadding(PADDING_4(10))
 					+ SUniformGridPanel::Slot(0, 0)
 					[
 						CreateSection(powerUpField, "Power Up Token", "Enter the token key of your power up API",
-						              "Enter the token of power up")
+									  "Enter the token of power up")
 					]
 					+ SUniformGridPanel::Slot(0, 1)
 					[
 						CreateSection(tokenField, "Personal Token",
-						              "This is a key genereated only for you. It must never be shared !",
-						              "Enter the personal token")
+									  "This is a key genereated only for you. It must never be shared !",
+									  "Enter the personal token")
 					]
 					+ SUniformGridPanel::Slot(0, 2)
 					[
 						CreateSection(idBoardField, "Board ID", "Enter the ID of the board", "Enter the id of board")
-					]
+					]						
 				]
-				+ SGridPanel::Slot(0, 2)
+				+ SGridPanel::Slot(0, 2)				
 				[
 					SNew(SHorizontalBox)
 					+ SHorizontalBox::Slot()
 					.FillWidth(1.0f)
-					[
-						SNew(SScaleBox)
-						.Stretch(EStretch::ScaleToFit)
-						[
-							TrelloUtils::CreateButton("Test connection",
+					[						
+							TrelloUtils::CreateButton("Test Connection",
 							                          FOnClicked::CreateRaw(this, &STrelloLinkSettings::TestConnection))
-						]
+						
+					]
+					+ SHorizontalBox::Slot()
+					.AutoWidth()
+					[
+						SNew(SSpacer)
+						.Size(FVector2D(PADDING_4(5)))
 					]
 					+ SHorizontalBox::Slot()
 					.FillWidth(1.0f)
 					[
-						SNew(SScaleBox)
-						.Stretch(EStretch::ScaleToFit)
-						[
-							TrelloUtils::CreateButton("Save",
+						TrelloUtils::CreateButton("Save Credentials",
 							                          FOnClicked::CreateRaw(this, &STrelloLinkSettings::SaveCredentials))
-						]
+						
 					]
 				]
 			]
