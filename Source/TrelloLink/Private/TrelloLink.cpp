@@ -133,7 +133,7 @@ void FTrelloLinkModule::RegisterMenus()
 	TArray<FName> ExtendedMenu = {
 		"LevelEditor.MainMenu",
 		"AssetEditor.WidgetBlueprintEditor.MainMenu",
-		"AssetEditor.WidgetBlueprintEditor.MainMenu"
+		"AssetEditor.BlueprintEditor.MainMenu"
 	};
 
 	for (const FName& Menu : ExtendedMenu)

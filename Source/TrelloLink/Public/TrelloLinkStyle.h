@@ -11,7 +11,7 @@ class FTrelloLinkStyle
 private:
 	static TArray<TSharedRef<FSlateStyleSet>> styles;
 	static TSharedPtr<FSlateStyleSet> StyleInstance;
-	
+
 public:
 	static void Initialize();
 	static void Shutdown();
@@ -20,7 +20,7 @@ public:
 	/** @return The Slate style set for the Shooter game */
 	static const ISlateStyle& Get();
 	static FName GetStyleSetName();
-	
+
 private:
 	static void CreateIcons();
 	static TSharedRef<FSlateStyleSet> Create();

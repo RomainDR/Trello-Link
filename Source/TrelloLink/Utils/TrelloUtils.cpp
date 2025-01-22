@@ -1,7 +1,6 @@
 ﻿#include "TrelloUtils.h"
 
 #include "Framework/Notifications/NotificationManager.h"
-#include "Interfaces/IPluginManager.h"
 #include "Widgets/Notifications/SNotificationList.h"
 
 void TrelloUtils::SendPopupWarning(const FString& _title, const FString& _message, EAppMsgType::Type _type)
@@ -29,11 +28,6 @@ void TrelloUtils::SendPopupEngine(const FString& _text, const FString& _subText)
 	FNotificationInfo Info(FText::FromString(_text));
 	Info.SubText = FText::FromString(_subText);
 	FSlateNotificationManager::Get().AddNotification(Info);
-}
-
-TSharedRef<STextBlock> TrelloUtils::CreateText(const FString& _text)
-{
-	return TEXT_WIDGET(_text);
 }
 
 TSharedRef<SButton> TrelloUtils::CreateButton(const FString& _text, const FOnClicked& _callback,
