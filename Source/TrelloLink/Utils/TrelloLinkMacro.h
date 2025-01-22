@@ -2,6 +2,11 @@
 
 #include "Interfaces/IPluginManager.h"
 
+//----- [PADDING] -----//
+#define PADDING_8(size) size * 8
+#define PADDING_4(size) size * 4
+//----- [PADDING] -----//
+
 //----- [PATH] -----
 #define RESOURCES_PATH IPluginManager::Get().FindPlugin("TrelloLink")->GetBaseDir() + "/Resources"
 //----- [PATH] -----
@@ -45,3 +50,14 @@ TEXT_WIDGET(_text) \
 #define VLeft VAlign_Left
 #define VRight VAlign_Right
 //----- [ALIGNMENT] -----
+
+
+//----[OVERRIDE] -----//
+#define INVTEXT_OVERRIDE(str) FText::AsCultureInvariant(str)
+#define GET_ICON(nameStyle, nameIcon) FSlateIcon(FName(nameStyle), nameIcon)
+#define CREATE_ACTION(clazz, method) FUIAction(FExecuteAction::CreateRaw(this, &clazz::method)));
+#define CREATE_ICON(nameStyle, iconName, iconResource, size2D) TSharedRef<FSlateStyleSet> Style = MakeShareable(new FSlateStyleSet(nameStyle)); \
+Style->SetContentRoot(IPluginManager::Get().FindPlugin("TrelloLink")->GetBaseDir() / TEXT("Resources"));\
+Style->Set(iconName, new IMAGE_BRUSH_SVG(TEXT(iconResource), size2D));\
+return Style;
+//----[OVERRIDE] -----//

@@ -32,12 +32,12 @@ void TrelloUtils::SendPopupEngine(const FString& _text, const FString& _subText)
 }
 
 TSharedRef<STextBlock> TrelloUtils::CreateText(const FString& _text)
-{	
+{
 	return TEXT_WIDGET(_text);
 }
 
-TSharedRef<SButton> TrelloUtils::CreateButton(const FString& _text, const FOnClicked& _callback, const FSlateFontInfo& _font, const ETextTransformPolicy& _transformPolicy)
-{	
+TSharedRef<SButton> TrelloUtils::CreateButton(const FString& _text, const FOnClicked& _callback,
+                                              const FSlateFontInfo& _font, const ETextTransformPolicy& _transformPolicy)
+{
 	return BUTTON_WIDGET(_text, _callback, HCenter, VCenter, _transformPolicy, _font);
 }
-

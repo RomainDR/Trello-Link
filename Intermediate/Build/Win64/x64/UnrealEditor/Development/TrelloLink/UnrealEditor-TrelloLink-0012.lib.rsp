@@ -1,0 +1,17 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-TrelloLink-0012.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\Users\DROU0912\Documents\Unreal Projects\PluginTrello\Intermediate\Build\Win64\x64\PluginTrelloEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.InclOrderOldest.h.obj"
+"C:\Users\DROU0912\Documents\Unreal Projects\PluginTrello\Plugins\TrelloLink\Intermediate\Build\Win64\x64\UnrealEditor\Development\TrelloLink\TrelloLinkBoard.cpp.obj"
+"C:\Users\DROU0912\Documents\Unreal Projects\PluginTrello\Plugins\TrelloLink\Intermediate\Build\Win64\x64\UnrealEditor\Development\TrelloLink\TrelloLinkSettings.cpp.obj"
+"C:\Users\DROU0912\Documents\Unreal Projects\PluginTrello\Plugins\TrelloLink\Intermediate\Build\Win64\x64\UnrealEditor\Development\TrelloLink\TrelloLink.cpp.obj"
+"C:\Users\DROU0912\Documents\Unreal Projects\PluginTrello\Plugins\TrelloLink\Intermediate\Build\Win64\x64\UnrealEditor\Development\TrelloLink\TrelloLinkCommands.cpp.obj"
+"C:\Users\DROU0912\Documents\Unreal Projects\PluginTrello\Plugins\TrelloLink\Intermediate\Build\Win64\x64\UnrealEditor\Development\TrelloLink\TrelloLinkStyle.cpp.obj"
+"C:\Users\DROU0912\Documents\Unreal Projects\PluginTrello\Plugins\TrelloLink\Intermediate\Build\Win64\x64\UnrealEditor\Development\TrelloLink\TrelloUtils.cpp.obj"
+"C:\Users\DROU0912\Documents\Unreal Projects\PluginTrello\Plugins\TrelloLink\Intermediate\Build\Win64\x64\UnrealEditor\Development\TrelloLink\Default.rc2.res"
+/OUT:"C:\Users\DROU0912\Documents\Unreal Projects\PluginTrello\Plugins\TrelloLink\Intermediate\Build\Win64\x64\UnrealEditor\Development\TrelloLink\UnrealEditor-TrelloLink-0012.lib"

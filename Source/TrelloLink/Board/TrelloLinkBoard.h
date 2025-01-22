@@ -28,8 +28,8 @@ private:
 
 public:
 	SLATE_BEGIN_ARGS(STrelloLinkBoard)
-	{
-	}
+		{
+		}
 
 	SLATE_END_ARGS()
 

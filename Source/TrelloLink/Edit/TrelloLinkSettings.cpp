@@ -1,12 +1,15 @@
 ﻿#include "TrelloLinkSettings.h"
 
 #include "JsonObjectConverter.h"
+#include "Components/BorderSlot.h"
+#include "Components/SizeBox.h"
 #include "Interfaces/IHttpResponse.h"
 #include "Interfaces/IPluginManager.h"
 #include "JsonUtils/JsonPointer.h"
 #include "TrelloLink/Utils/TrelloLinkMacro.h"
 #include "Widgets/SCanvas.h"
 #include "Widgets/Layout/SScaleBox.h"
+#include "Widgets/Layout/SUniformGridPanel.h"
 
 
 void STrelloLinkSettings::OnResponseAPI(TSharedPtr<IHttpRequest> HttpRequest, TSharedPtr<IHttpResponse> HttpResponse,
@@ -18,13 +21,14 @@ void STrelloLinkSettings::OnResponseAPI(TSharedPtr<IHttpRequest> HttpRequest, TS
 		const FString ResponseBody = HttpResponse->GetContentAsString(); //recupère le contenu en string
 
 		TSharedRef<TJsonReader<>> reader = TJsonReaderFactory<>::Create(ResponseBody); //Crée un reader avec la requete
-		TArray< TSharedPtr<FJsonValue> > _result; //On va stocker dans un tarray tout les values retourner en json
-		
+		TArray<TSharedPtr<FJsonValue>> _result; //On va stocker dans un tarray tout les values retourner en json
+
 		if (FJsonSerializer::Deserialize(reader, _result)) //On deserialize tout les object json
-		{			
+		{
 			for (const TSharedPtr<FJsonValue>& JsonValue : _result) //boucle pour récupérer tout les objects
 			{
-				const FString _id = JsonValue->AsObject()->GetStringField(TEXT("name")); //On dis que si JsonValue est un objet, on récupère le field "name"
+				const FString _id = JsonValue->AsObject()->GetStringField(TEXT("name"));
+				//On dis que si JsonValue est un objet, on récupère le field "name"
 				GLog->Log(_id);
 			}
 		}
@@ -53,27 +57,40 @@ TSharedRef<SBox> STrelloLinkSettings::CreateTab()
 	Request->SetHeader("Content-Type", "application/json"); //Le type de contenu
 
 	Request->ProcessRequest();*/
-	
+
 	return SNew(SBox)
-		.Padding(50)
+		.Padding(PADDING_8(3))
 		[
-			SNew(SVerticalBox)
-			+SVerticalBox::Slot()
+			SNew(SBorder)
+			.BorderBackgroundColor(FLinearColor(255, 0, 0, 1))
 			[
-				SNew(SScaleBox)
-				.Stretch(EStretch::ScaleToFit)
+				SNew(SGridPanel)
+				.FillColumn(0, 1.0f)
+				.FillRow(0, 1.0f)
+				.FillRow(1, 5.0f)
+				+ SGridPanel::Slot(0, 0)
 				[
-					SNew(STextBlock)
-					.Text(FText::FromString("Settings"))
+					SNew(SScaleBox)
+					.Stretch(EStretch::ScaleToFit)
+					[
+						SNew(STextBlock)
+						.Text(FText::FromString("Settings"))
+						.Justification(ETextJustify::Center)
+					]
 				]
-			]
-			+SVerticalBox::Slot()
-			[
-				SNew(SScaleBox)
-				.Stretch(EStretch::ScaleToFit)
+				+ SGridPanel::Slot(0, 1)
 				[
-					SNew(SEditableTextBox)
-					.HintText(FText::FromString("Insert the api key"))
+					SNew(SUniformGridPanel)
+					.SlotPadding(PADDING_4(2))
+					+ SUniformGridPanel::Slot(0, 0)
+					[
+						SNew(SBox)
+						.WidthOverride(1000)
+						[
+							SNew(STextBlock)
+							.Text(FText::FromString("Settings"))
+						]
+					]
 				]
 			]
 		];

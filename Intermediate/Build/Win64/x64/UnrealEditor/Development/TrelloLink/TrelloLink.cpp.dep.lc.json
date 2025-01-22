@@ -1,0 +1,30 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "c:\\users\\drou0912\\documents\\unreal projects\\plugintrello\\plugins\\trellolink\\source\\trellolink\\private\\trellolink.cpp",
+        "ProvidedModule": "",
+        "PCH": "c:\\users\\drou0912\\documents\\unreal projects\\plugintrello\\intermediate\\build\\win64\\x64\\plugintrelloeditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.cpp20.inclorderoldest.h.pch",
+        "Includes": [
+            "c:\\users\\drou0912\\documents\\unreal projects\\plugintrello\\plugins\\trellolink\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\trellolink\\definitions.trellolink.h",
+            "c:\\users\\drou0912\\documents\\unreal projects\\plugintrello\\plugins\\trellolink\\source\\trellolink\\public\\trellolink.h",
+            "c:\\program files\\epic games\\ue_5.4\\engine\\source\\editor\\leveleditor\\public\\leveleditor.h",
+            "c:\\program files\\epic games\\ue_5.4\\engine\\source\\editor\\leveleditor\\public\\ileveleditor.h",
+            "c:\\program files\\epic games\\ue_5.4\\engine\\source\\runtime\\engine\\public\\elements\\framework\\engineelementslibrary.h",
+            "c:\\program files\\epic games\\ue_5.4\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\engineelementslibrary.generated.h",
+            "c:\\program files\\epic games\\ue_5.4\\engine\\source\\editor\\leveleditor\\public\\viewporttypedefinition.h",
+            "c:\\program files\\epic games\\ue_5.4\\engine\\source\\editor\\leveleditor\\public\\leveleditoroutlinersettings.h",
+            "c:\\program files\\epic games\\ue_5.4\\engine\\source\\developer\\toolwidgets\\public\\filters\\genericfilter.h",
+            "c:\\program files\\epic games\\ue_5.4\\engine\\source\\developer\\toolwidgets\\public\\filters\\filterbase.h",
+            "c:\\program files\\epic games\\ue_5.4\\engine\\source\\editor\\unrealed\\public\\sourcecodenavigation.h",
+            "c:\\users\\drou0912\\documents\\unreal projects\\plugintrello\\plugins\\trellolink\\source\\trellolink\\public\\trellolinkstyle.h",
+            "c:\\users\\drou0912\\documents\\unreal projects\\plugintrello\\plugins\\trellolink\\source\\trellolink\\public\\trellolinkcommands.h",
+            "c:\\users\\drou0912\\documents\\unreal projects\\plugintrello\\plugins\\trellolink\\source\\trellolink\\board\\trellolinkboard.h",
+            "c:\\users\\drou0912\\documents\\unreal projects\\plugintrello\\plugins\\trellolink\\source\\trellolink\\edit\\trellolinksettings.h",
+            "c:\\program files\\epic games\\ue_5.4\\engine\\source\\runtime\\online\\http\\public\\httpmodule.h",
+            "c:\\program files\\epic games\\ue_5.4\\engine\\source\\runtime\\online\\http\\public\\interfaces\\ihttprequest.h",
+            "c:\\program files\\epic games\\ue_5.4\\engine\\source\\runtime\\online\\http\\public\\interfaces\\ihttpbase.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

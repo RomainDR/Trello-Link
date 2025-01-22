@@ -1,0 +1,15 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "c:\\users\\drou0912\\documents\\unreal projects\\plugintrello\\plugins\\trellolink\\source\\trellolinksettings\\private\\trellolinkcommands.cpp",
+        "ProvidedModule": "",
+        "PCH": "c:\\users\\drou0912\\documents\\unreal projects\\plugintrello\\intermediate\\build\\win64\\x64\\plugintrelloeditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.cpp20.inclorderoldest.h.pch",
+        "Includes": [
+            "c:\\users\\drou0912\\documents\\unreal projects\\plugintrello\\plugins\\trellolink\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\trellolinksettings\\definitions.trellolinksettings.h",
+            "c:\\users\\drou0912\\documents\\unreal projects\\plugintrello\\plugins\\trellolink\\source\\trellolinksettings\\public\\trellolinkcommands.h",
+            "c:\\users\\drou0912\\documents\\unreal projects\\plugintrello\\plugins\\trellolink\\source\\trellolinksettings\\public\\trellolinkstyle.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

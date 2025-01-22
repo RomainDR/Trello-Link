@@ -5,10 +5,15 @@
 #include "Framework/Application/SlateApplication.h"
 #include "Interfaces/IPluginManager.h"
 #include "Styling/SlateStyleMacros.h"
+#include "TrelloLink/Utils/TrelloLinkMacro.h"
 
 #define RootToContentDir Style->RootToContentDir
 
+const FVector2D Icon16x16(16.0f, 16.0f);
+const FVector2D Icon20x20(20.0f, 20.0f);
+
 TSharedPtr<FSlateStyleSet> FTrelloLinkStyle::StyleInstance = nullptr;
+TArray<TSharedRef<FSlateStyleSet>> FTrelloLinkStyle::styles = {};
 
 void FTrelloLinkStyle::Initialize()
 {
@@ -17,6 +22,10 @@ void FTrelloLinkStyle::Initialize()
 		StyleInstance = Create();
 		FSlateStyleRegistry::RegisterSlateStyle(*StyleInstance);
 	}
+	CreateIcons();
+	for (const TSharedRef<FSlateStyleSet>& SlateStyleSet : styles)	
+		FSlateStyleRegistry::RegisterSlateStyle(*SlateStyleSet);
+	
 }
 
 void FTrelloLinkStyle::Shutdown()
@@ -24,6 +33,9 @@ void FTrelloLinkStyle::Shutdown()
 	FSlateStyleRegistry::UnRegisterSlateStyle(*StyleInstance);
 	ensure(StyleInstance.IsUnique());
 	StyleInstance.Reset();
+
+	for (const TSharedRef<FSlateStyleSet>& Style : styles)	
+		FSlateStyleRegistry::UnRegisterSlateStyle(*Style);
 }
 
 FName FTrelloLinkStyle::GetStyleSetName()
@@ -32,17 +44,14 @@ FName FTrelloLinkStyle::GetStyleSetName()
 	return StyleSetName;
 }
 
-const FVector2D Icon16x16(16.0f, 16.0f);
-const FVector2D Icon20x20(20.0f, 20.0f);
+void FTrelloLinkStyle::CreateIcons()
+{
+	//TODO create icons
+}
 
 TSharedRef<FSlateStyleSet> FTrelloLinkStyle::Create()
 {
-	TSharedRef<FSlateStyleSet> Style = MakeShareable(new FSlateStyleSet("TrelloLinkStyle"));
-	Style->SetContentRoot(IPluginManager::Get().FindPlugin("TrelloLink")->GetBaseDir() / TEXT("Resources"));
-
-	Style->Set("TrelloLink.OpenPluginWindow", new IMAGE_BRUSH_SVG(TEXT("PlaceholderButtonIcon"), Icon20x20));
-
-	return Style;
+	CREATE_ICON("TrelloLinkStyle", "TrelloLink.OpenPluginWindow", "PlaceholderButtonIcon", Icon20x20);
 }
 
 void FTrelloLinkStyle::ReloadTextures()
