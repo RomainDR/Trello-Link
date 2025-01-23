@@ -9,6 +9,7 @@
 
 //----- [PATH] -----
 #define RESOURCES_PATH IPluginManager::Get().FindPlugin("TrelloLink")->GetBaseDir() + "/Resources"
+#define CREDENTIALS_PATH FPaths::Combine(FPaths::ProjectConfigDir(),"credentials_trello.json")
 //----- [PATH] -----
 
 //----- [FONT] -----

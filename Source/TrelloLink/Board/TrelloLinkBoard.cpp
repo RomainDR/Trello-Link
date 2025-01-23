@@ -8,11 +8,35 @@ BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
 void STrelloLinkBoard::Construct(const FArguments& InArgs)
 {
+	LoadCredentials();
 	ChildSlot
 	[
 		CreateTab()
 	];
-	switcher->SetActiveWidgetIndex(currentIndex);
+	SwitchPanel(static_cast<EStateWidget>(currentIndex));
+}
+
+void STrelloLinkBoard::LoadCredentials()
+{	
+	FString jsonFile;
+	FFileHelper::LoadFileToString(jsonFile, *CREDENTIALS_PATH);
+	if (jsonFile.IsEmpty())
+		return;
+	
+	TSharedPtr<FJsonObject> JsonObject;
+	TSharedRef<TJsonReader<>> reader = TJsonReaderFactory<>::Create(jsonFile);
+	TSharedPtr<FJsonValue> _result;
+		
+	if (FJsonSerializer::Deserialize(reader, _result))
+	{
+		powerUpToken	= _result->AsObject()->GetStringField(TEXT("powerUpToken"));
+		token	= _result->AsObject()->GetStringField(TEXT("personalToken"));
+		boardId	= _result->AsObject()->GetStringField(TEXT("boardId"));		
+	}
+	else
+	{
+		TrelloUtils::SendPopupError("Deserialize failed", "Error deserializing credentials json.");
+	}
 }
 
 TSharedRef<SBox> STrelloLinkBoard::GetButtonsTabs()
@@ -107,20 +131,15 @@ TSharedRef<SWidget> STrelloLinkBoard::DeletePanel()
 FReply STrelloLinkBoard::SwitchPanel(const EStateWidget& _enum)
 {
 	const int _index = static_cast<int>(_enum);
-	if (switcher->GetActiveWidgetIndex() == _index)
-	{
+	if (switcher->GetActiveWidgetIndex() == _index)	
 		return FReply::Unhandled();
-	}
-
-	TrelloUtils::SendPopupInformation("Information", "Num child: " + FString::FromInt(switcher->GetNumWidgets()));
+		
 	if (_index > switcher->GetNumWidgets())
 	{
 		TrelloUtils::SendPopupError("Error", "Failed to open state at index " + FString::FromInt(_index));
 		return FReply::Unhandled();
 	}
 	currentIndex = _index - 1;
-	TrelloUtils::SendPopupInformation("Information", "Open index: " + FString::FromInt(_index));
-
 	switcher->SetActiveWidgetIndex(_index);
 	switch (_enum)
 	{
@@ -141,15 +160,15 @@ FReply STrelloLinkBoard::SwitchPanel(const EStateWidget& _enum)
 
 void STrelloLinkBoard::OpenCreateFrame() const
 {
-	TrelloUtils::SendPopupInformation("Trello Link", "Open create");
+	
 }
 
 void STrelloLinkBoard::OpenEditFrame() const
 {
-	TrelloUtils::SendPopupInformation("Trello Link", "Open edit");
+	
 }
 
 void STrelloLinkBoard::OpenDeleteFrame() const
 {
-	TrelloUtils::SendPopupInformation("Trello Link", "Open delete");
+	
 }

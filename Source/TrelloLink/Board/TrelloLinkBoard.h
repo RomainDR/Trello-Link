@@ -10,21 +10,12 @@ enum class EStateWidget
 
 class STrelloLinkBoard final : public SCompoundWidget
 {
-private:
+
 	TSharedPtr<SWidgetSwitcher> switcher;
 	int currentIndex = static_cast<int>(EStateWidget::Create);
-
-private:
-	TSharedRef<SBox> GetButtonsTabs();
-	TSharedRef<SWidget> CreateTab();
-	TSharedRef<SWidget> CreatePanel();
-	TSharedRef<SWidget> EditPanel();
-	TSharedRef<SWidget> DeletePanel();
-
-	FReply SwitchPanel(const EStateWidget& _enum);
-	void OpenCreateFrame() const;
-	void OpenEditFrame() const;
-	void OpenDeleteFrame() const;
+	FString powerUpToken;
+	FString token;
+	FString boardId;
 
 public:
 	SLATE_BEGIN_ARGS(STrelloLinkBoard)
@@ -34,4 +25,17 @@ public:
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs);
+	
+private:
+	TSharedRef<SBox> GetButtonsTabs();
+	TSharedRef<SWidget> CreateTab();
+	TSharedRef<SWidget> CreatePanel();
+	TSharedRef<SWidget> EditPanel();
+	TSharedRef<SWidget> DeletePanel();
+
+	FReply SwitchPanel(const EStateWidget& _enum);
+	void LoadCredentials();
+	void OpenCreateFrame() const;
+	void OpenEditFrame() const;
+	void OpenDeleteFrame() const;
 };

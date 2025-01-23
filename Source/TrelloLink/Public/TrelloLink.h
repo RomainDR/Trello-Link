@@ -55,6 +55,7 @@ private:
 	 * @return A FToolMenuSection reference to use
 	 */
 	FToolMenuSection& AddAndGetMenuSection(UToolMenu* _menu, const FString& _sectionName);
+	void OnTabRelocated();
 	/**
 	 * Create and spawn a new window slate
 	 * @param SpawnTabArgs 

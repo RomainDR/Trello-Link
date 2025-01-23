@@ -8,7 +8,7 @@
 #include "Widgets/Layout/SUniformGridPanel.h"
 
 
-FReply STrelloLinkSettings::TestConnection()
+FReply STrelloLinkSettings::TestConnection() const
 {
 	TSharedPtr<IHttpRequest> Request = Http->CreateRequest(); //On crée la requete
 
@@ -28,30 +28,56 @@ FReply STrelloLinkSettings::TestConnection()
 	return FReply::Handled();
 }
 
-FReply STrelloLinkSettings::SaveCredentials()
-{
-	const FString _path = FPaths::ProjectConfigDir();
-	const FString _fileName = "/credentials_trello.json";
-	const FString _fullPath = FPaths::Combine(_path, _fileName);
-	GLog->Log(_fullPath);
+FReply STrelloLinkSettings::SaveCredentials() const
+{	
+	const FString _fullPath = CREDENTIALS_PATH;
 
 	TMap<FString, FString> _parameters;
 	_parameters.Add("powerUpToken", powerUpField.Get()->GetText().ToString());
 	_parameters.Add("personalToken", tokenField.Get()->GetText().ToString());
 	_parameters.Add("boardId", idBoardField.Get()->GetText().ToString());
-
-	TSharedPtr<FJsonObject> JsonObject;
+	
+	TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject()); //crée un json
 
 	for (const TTuple<FString, FString>& Parameter : _parameters)
 		JsonObject.Get()->SetStringField(Parameter.Key, Parameter.Value);
 	
-	
+
 	FString jsonResult;
 	if (FJsonSerializer::Serialize(JsonObject.ToSharedRef(), TJsonWriterFactory<>::Create(&jsonResult, 0)))
 	{
 		FFileHelper::SaveStringToFile(jsonResult, *_fullPath);
+		TrelloUtils::SendPopupSuccess("Success", "Credentials has been saved correctly.");
+		return FReply::Handled();
 	}
-	return FReply::Handled();
+	return FReply::Unhandled();
+}
+
+void STrelloLinkSettings::LoadCredentials()
+{	
+	FString jsonFile;
+	FFileHelper::LoadFileToString(jsonFile, *CREDENTIALS_PATH);
+	if (jsonFile.IsEmpty())
+		return;
+	
+	TSharedPtr<FJsonObject> JsonObject;
+	TSharedRef<TJsonReader<>> reader = TJsonReaderFactory<>::Create(jsonFile);
+	TSharedPtr<FJsonValue> _result;
+		
+	if (FJsonSerializer::Deserialize(reader, _result))
+	{
+		const FString _powerUpToken	= _result->AsObject()->GetStringField(TEXT("powerUpToken"));
+		const FString _personalToken	= _result->AsObject()->GetStringField(TEXT("personalToken"));
+		const FString _boardId	= _result->AsObject()->GetStringField(TEXT("boardId"));
+
+		powerUpField.Get()->SetText(FTEXT(_powerUpToken));
+		tokenField.Get()->SetText(FTEXT(_personalToken));
+		idBoardField.Get()->SetText(FTEXT(_boardId));
+	}
+	else
+	{
+		TrelloUtils::SendPopupError("Deserialize failed", "Error deserializing credentials json");
+	}
 }
 
 void STrelloLinkSettings::OnResponseAPI(TSharedPtr<IHttpRequest> HttpRequest, TSharedPtr<IHttpResponse> HttpResponse,
@@ -67,8 +93,8 @@ void STrelloLinkSettings::OnResponseAPI(TSharedPtr<IHttpRequest> HttpRequest, TS
 		
 		if (FJsonSerializer::Deserialize(reader, _result))
 		{			
-				const FString _name	= _result->AsObject()->GetStringField(TEXT("name"));			
-				TrelloUtils::SendPopupSuccess("Success", FORMAT(FString("Successful connection to '{0}' board"), _name));
+			const FString _name	= _result->AsObject()->GetStringField(TEXT("name"));			
+			TrelloUtils::SendPopupSuccess("Success", FORMAT(FString("Successful connection to '{0}' board"), _name));
 		}		
 		else
 		{
@@ -79,27 +105,6 @@ void STrelloLinkSettings::OnResponseAPI(TSharedPtr<IHttpRequest> HttpRequest, TS
 	{
 		TrelloUtils::SendPopupError("Connection Failed", FORMAT(FString("Connection Failed: \nResponse code: {0}.\nError: {1}"), FString::FromInt(HttpResponse->GetResponseCode()), HttpResponse->GetContentAsString()));
 	}
-	
-	/*TSharedPtr<FJsonObject> JsonObject; //Crée un json object
-	if (HttpResponse->GetResponseCode() == 200) //check si on retourne bien quelque chose
-	{
-		const FString ResponseBody = HttpResponse->GetContentAsString(); //recupère le contenu en string
-
-		TSharedRef<TJsonReader<>> reader = TJsonReaderFactory<>::Create(ResponseBody); //Crée un reader avec la requete
-		TArray<TSharedPtr<FJsonValue>> _result; //On va stocker dans un tarray tout les values retourner en json
-
-		if (FJsonSerializer::Deserialize(reader, _result)) //On deserialize tout les object json
-		{
-			for (const TSharedPtr<FJsonValue>& JsonValue : _result) //boucle pour récupérer tout les objects
-			{
-				const FString _id = JsonValue->AsObject()->GetStringField(TEXT("name"));
-				//On dis que si JsonValue est un objet, on récupère le field "name"
-				GLog->Log(_id);
-			}
-		}
-	}*/
-
-	
 }
 
 void STrelloLinkSettings::Construct(const FArguments& InArgs)
@@ -109,6 +114,7 @@ void STrelloLinkSettings::Construct(const FArguments& InArgs)
 	[
 		CreateTab()
 	];
+	LoadCredentials();
 }
 
 TSharedRef<SVerticalBox> STrelloLinkSettings::CreateSection(TSharedPtr<SEditableTextBox>& _assign,
